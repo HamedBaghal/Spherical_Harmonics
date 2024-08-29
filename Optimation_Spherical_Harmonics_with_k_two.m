@@ -1,5 +1,6 @@
 clear;
 clc;
+close all;
 k=2;
 syms x
 expr=legendreP(k,x);
@@ -25,6 +26,9 @@ a=[0.891771735907531   0.238139079376444  -0.384750503574323;-0.167320282089863 
 %a=[0.8040   -0.5208    0.2870;0.8285    0.3759   -0.4150;-0.0432    0.5419   -0.8393;0.7144    0.3877    0.5825;-0.1593   -0.9864    0.0394]
 %a=[-0.7570    0.5819    0.2973;-0.6506   -0.6542   -0.3855;-0.0297   -0.4851    0.8739]
 %a=[1,0,0;0,1,0;0,0,1];
+
+
+
 G=zeros(2*k+1,2*k+1);
 % a=zeros(2*k+1,3);
 % while abs(det(G))<.0128
@@ -61,7 +65,9 @@ end
 
 objectiveFun
 
+T=zeros(1,101);
 
+T(1)=objectiveFun;
 
 for p=1:100
 
@@ -117,7 +123,9 @@ f = @(t) double(subs(objectiveFun, t));
 [tmin, fval] = fminbnd(f, 0, 4*pi);
 fval;
 
-a(n,:)=cos(tmin)*a(n,:)+sin(tmin)*w;
+if ~(fval>T(p))
+    a(n,:)=cos(tmin)*a(n,:)+sin(tmin)*w;
+end 
 
 %end
 objectiveFun=0;
@@ -130,14 +138,24 @@ for j=1:2*k+1
 end
 end
 
-objectiveFun;
+T(p+1)=objectiveFun;
+p+1
+w
+objectiveFun
 %n
 
 end
 
-objectiveFun
+plot(T,'DisplayName','Steps of Convergence','LineWidth',3);
+legend('Location','northeast','FontSize', 20)
+grid on
+hold on
+plot(T,'*y','DisplayName','')
+hold on
 
-a
+
+
+Optimal_Points=a
 
 G=zeros(2*k+1,2*k+1);
 
